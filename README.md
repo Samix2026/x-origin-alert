@@ -20,7 +20,7 @@
 
 ## التثبيت
 
-1. حمل آخر نسخة من [صفحة النسخ Releases](https://github.com/Samix2026/x-origin-alert/releases/latest): اضغط ملف **x-origin-alert.zip**، وفك الضغط.
+1. حمل آخر نسخة من [صفحة النسخ Releases](https://github.com/Samix2026/x-origin-alert/releases/latest): اضغط ملف **Source code (zip)** في قسم Assets، وفك الضغط.
 2. افتح في كروم الرابط `chrome://extensions`.
 3. فعل **Developer mode** أعلى الصفحة.
 4. اضغط **Load unpacked** واختر المجلد الذي فككته.
