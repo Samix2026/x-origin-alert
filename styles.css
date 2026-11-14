@@ -1,0 +1,20 @@
+.xoa-badge {
+  display: inline-flex;
+  align-items: center;
+  margin-inline-start: 6px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: #fff4e5;
+  color: #b45309;
+  border: 1px solid #f59e0b;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 18px;
+  white-space: nowrap;
+  direction: ltr;
+  cursor: help;
+  vertical-align: middle;
+}
+@media (prefers-color-scheme: dark) {
+  .xoa-badge { background: #3a2a0f; color: #fbbf24; border-color: #b45309; }
+}
