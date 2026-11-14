@@ -12,7 +12,7 @@
   line-height: 18px;
   white-space: nowrap;
   direction: ltr;
-  cursor: help;
+  cursor: pointer;
   vertical-align: middle;
 }
 @media (prefers-color-scheme: dark) {

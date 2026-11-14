@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "منبه موقع الحساب في اكس",
   "short_name": "X Origin Alert",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "يضع علامة تحذير بجانب الحسابات التي تظهر منطقتها West Asia أو North Africa أو يظهر عليها مؤشر VPN في منصة اكس.",
   "permissions": [
     "storage"

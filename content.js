@@ -4,6 +4,7 @@
   const DEFAULTS = { enabled: true, regions: ['West Asia', 'North Africa'], warnVpn: true };
   const TTL_OK = 14 * 24 * 3600 * 1000;      // تخزين النتيجة 14 يوما
   const TTL_EMPTY = 2 * 24 * 3600 * 1000;    // حساب بلا بيانات: يومان
+  const TTL_FLAG = 24 * 3600 * 1000;         // التحذير يعاد فحصه بعد يوم واحد
   const GAP_MS = 2500;                        // طلب واحد كل 2.5 ثانية كحد أقصى
   const CACHE_KEY = 'xoa_cache';
 
@@ -24,7 +25,18 @@
     settings = { ...DEFAULTS, ...(s.xoa_settings || {}) };
     cache = s[CACHE_KEY] || {};
     const now = Date.now();
-    for (const [u, v] of Object.entries(cache)) if (!v || v.exp < now) delete cache[u];
+    for (const [u, v] of Object.entries(cache)) {
+      if (!v || v.exp < now) { delete cache[u]; continue; }
+      // تحذير محفوظ أقدم من يوم، أو من نسخة سابقة بلا وقت فحص: يحذف ليعاد فحصه
+      if (classify(v) && (!v.t || now - v.t > TTL_FLAG)) delete cache[u];
+    }
+  }
+  function store(u, basedIn, vpn) {
+    const rec = { b: basedIn, v: !!vpn, t: Date.now() };
+    const ttl = classify(rec) ? TTL_FLAG : (basedIn ? TTL_OK : TTL_EMPTY);
+    rec.exp = rec.t + ttl;
+    cache[u.toLowerCase()] = rec;
+    saveSoon();
   }
   function saveSoon() {
     clearTimeout(saveTimer);
@@ -65,8 +77,10 @@
   }
 
   // ---------- الطابور ----------
-  function enqueue(u) {
-    if (!queue.includes(u)) queue.push(u);
+  function enqueue(u, front = false) {
+    const i = queue.indexOf(u);
+    if (i >= 0) queue.splice(i, 1);
+    if (front) queue.unshift(u); else queue.push(u);
     pump();
   }
   async function pump() {
@@ -77,14 +91,14 @@
     const u = queue.shift();
     // تخطي من لم يعد ظاهرا على الشاشة
     const els = (pending.get(u) || []).filter(e => e.isConnected);
-    if (!els.length) { pending.delete(u); busy = false; pump(); return; }
+    if (!els.length && !onPage(u).length) { pending.delete(u); busy = false; pump(); return; }
 
     const out = await ask(u);
     log(u, out);
     if (out.status === 'ok') {
-      cache[u.toLowerCase()] = { b: out.basedIn, v: !!out.vpn, exp: Date.now() + (out.basedIn ? TTL_OK : TTL_EMPTY) };
-      saveSoon();
+      store(u, out.basedIn, out.vpn);
       bump('checked');
+      if (classify(cache[u.toLowerCase()])) bump('flagged');
       setStatus('ok');
       paint(u);
     } else if (out.status === 'ratelimit') {
@@ -93,8 +107,8 @@
       setStatus('ratelimit');
       log('rate limited until', new Date(pausedUntil).toLocaleTimeString());
     } else if (out.status === 'nouser') {
-      cache[u.toLowerCase()] = { b: null, v: false, exp: Date.now() + TTL_EMPTY };
-      pending.delete(u);
+      store(u, null, false);
+      paint(u);
     } else {
       setStatus(out.status);
       pending.delete(u);
@@ -124,21 +138,41 @@
     if (reasons.includes('region')) tip.push(`اكس تعرض موقع هذا الحساب كمنطقة عامة: ${rec.b}، ولا تعرض دولة محددة.`);
     if (reasons.includes('vpn')) tip.push('اكس تشير إلى أن الحساب قد يتصل عبر VPN أو بروكسي، فالموقع المعروض قد لا يكون دقيقا.');
     tip.push('هذا مؤشر وليس حكما. تحقق قبل التفاعل.');
+    tip.push('اضغط على العلامة لإعادة الفحص الآن.');
     b.title = tip.join('\n');
+    b.addEventListener('click', onBadgeClick, true);
     return b;
   }
 
+  function onPage(u) {
+    return [...document.querySelectorAll(`[data-xoa-u="${u.toLowerCase()}"]`)];
+  }
   function paint(u) {
     const rec = cache[u.toLowerCase()];
-    const els = pending.get(u) || [];
+    const els = new Set([...(pending.get(u) || []), ...onPage(u)]);
     pending.delete(u);
     const reasons = classify(rec);
-    if (reasons) bump('flagged');
     for (const el of els) {
       if (!el.isConnected) continue;
       el.setAttribute('data-xoa', 'done');
-      if (reasons && !el.querySelector('.xoa-badge')) el.appendChild(makeBadge(rec, reasons));
+      el.querySelectorAll(':scope > .xoa-badge').forEach(b => b.remove());
+      if (reasons) el.appendChild(makeBadge(rec, reasons));
     }
+  }
+  // الضغط على العلامة: يلغي النتيجة المحفوظة ويعيد الفحص فورا
+  function onBadgeClick(ev) {
+    ev.preventDefault();
+    ev.stopPropagation();
+    const badge = ev.currentTarget;
+    const block = badge.parentElement;
+    const u = block && block.getAttribute('data-xoa-u');
+    if (!u) return;
+    badge.textContent = '⏳';
+    delete cache[u];
+    saveSoon();
+    if (!pending.has(u)) pending.set(u, []);
+    pending.get(u).push(block);
+    enqueue(u, true);
   }
 
   // ---------- رصد الأسماء على الشاشة ----------
@@ -163,13 +197,21 @@
 
   function handle(block) {
     if (!settings.enabled || block.getAttribute('data-xoa') === 'done') return;
-    const u = usernameOf(block);
-    if (!u) return;
-    const rec = cache[u.toLowerCase()];
+    const u0 = usernameOf(block);
+    if (!u0) return;
+    const u = u0.toLowerCase();
+    block.setAttribute('data-xoa-u', u);
+    const isProfile = block.getAttribute('data-testid') === 'UserName';
+    const rec = cache[u];
     if (!pending.has(u)) pending.set(u, []);
     pending.get(u).push(block);
-    if (rec && rec.exp > Date.now()) { paint(u); return; }
-    enqueue(u);
+    if (rec && rec.exp > Date.now()) {
+      paint(u);
+      // صفحة البروفايل تفحص من جديد دائما، وتظهر النتيجة المحفوظة مؤقتا حتى يصل الرد
+      if (isProfile) { pending.set(u, [block]); enqueue(u, true); }
+      return;
+    }
+    enqueue(u, isProfile);
   }
 
   function scan() {
