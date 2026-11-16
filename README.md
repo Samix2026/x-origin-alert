@@ -20,13 +20,24 @@
 
 ## التثبيت
 
-1. حمل آخر نسخة من [صفحة النسخ Releases](https://github.com/Samix2026/x-origin-alert/releases/latest): اضغط ملف **Source code (zip)** في قسم Assets، وفك الضغط.
-2. افتح في كروم الرابط `chrome://extensions`.
-3. فعل **Developer mode** أعلى الصفحة.
-4. اضغط **Load unpacked** واختر المجلد الذي فككته.
-5. افتح اكس وتصفح كالمعتاد.
+### الطريقة الأولى: من متجر كروم (ننصح بها)
 
-للتحديث: حمل النسخة الجديدة من نفس الصفحة، وضع ملفاتها مكان القديمة في نفس المجلد، ثم اضغط زر التحديث على الإضافة في صفحة `chrome://extensions`.
+1. افتح [صفحة الإضافة في متجر كروم](https://chromewebstore.google.com/detail/glekbdcdgghjbhehbdcojikcefjieikl)
+2. اضغط **Add to Chrome**
+3. افتح اكس وتصفح كالمعتاد
+
+التحديثات تصلك تلقائيا من المتجر.
+
+### الطريقة الثانية: يدويا من GitHub (للمطورين)
+
+1. حمل ملف **Source code (zip)** من [صفحة النسخ Releases](https://github.com/Samix2026/x-origin-alert/releases/latest)، وفك الضغط
+2. افتح في كروم الرابط `chrome://extensions`
+3. فعل **Developer mode** أعلى الصفحة
+4. اضغط **Load unpacked** واختر المجلد الذي فككته
+
+للتحديث: حمل النسخة الجديدة، وضع ملفاتها مكان القديمة في نفس المجلد، ثم اضغط زر التحديث على الإضافة في صفحة `chrome://extensions`.
+
+ملاحظة: نسخة المتجر قد تتأخر أياما عن آخر نسخة هنا، بسبب مدة مراجعة قوقل.
 
 ## الإعدادات
 
@@ -70,4 +81,4 @@ MIT
 
 ## English
 
-Chrome extension that shows a warning badge next to X (Twitter) usernames when the account's **Account based in** is *West Asia* or *North Africa*, or when X shows a VPN/proxy indicator. Runs entirely in your browser using your own X session; no data leaves x.com. The badge is a signal, not a verdict. Install via `chrome://extensions` → Developer mode → Load unpacked. MIT licensed.
+Chrome extension that shows a warning badge next to X (Twitter) usernames when the account's **Account based in** is *West Asia* or *North Africa*, or when X shows a VPN/proxy indicator. Runs entirely in your browser using your own X session; no data leaves x.com. The badge is a signal, not a verdict. Install from the [Chrome Web Store](https://chromewebstore.google.com/detail/glekbdcdgghjbhehbdcojikcefjieikl), or manually via `chrome://extensions` → Developer mode → Load unpacked. MIT licensed.
