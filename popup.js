@@ -1,4 +1,4 @@
-const DEFAULTS = { enabled: true, regions: ['West Asia', 'North Africa'], warnVpn: true };
+const DEFAULTS = { enabled: true, regions: ['West Asia', 'North Africa'], warnVpn: true, warnRenames: true, renameLimit: 10 };
 const STATUS_TEXT = {
   ok: 'يعمل بشكل طبيعي.',
   ratelimit: 'اكس أوقفت الطلبات مؤقتا (rate limit). الإضافة ستنتظر وتكمل تلقائيا.',
@@ -12,6 +12,8 @@ async function init() {
   const st = { ...DEFAULTS, ...(s.xoa_settings || {}) };
   $('enabled').checked = st.enabled;
   $('warnVpn').checked = st.warnVpn;
+  $('warnRenames').checked = st.warnRenames;
+  $('renameLimit').value = st.renameLimit;
   $('regions').value = st.regions.join('\n');
   $('checked').textContent = (s.xoa_stats && s.xoa_stats.checked) || 0;
   $('flagged').textContent = (s.xoa_stats && s.xoa_stats.flagged) || 0;
@@ -20,7 +22,8 @@ async function init() {
 
 $('save').onclick = async () => {
   const regions = $('regions').value.split('\n').map(x => x.trim()).filter(Boolean);
-  await chrome.storage.local.set({ xoa_settings: { enabled: $('enabled').checked, warnVpn: $('warnVpn').checked, regions } });
+  const renameLimit = Math.max(1, parseInt($('renameLimit').value, 10) || 10);
+  await chrome.storage.local.set({ xoa_settings: { enabled: $('enabled').checked, warnVpn: $('warnVpn').checked, warnRenames: $('warnRenames').checked, renameLimit, regions } });
   $('status').textContent = 'تم الحفظ.';
 };
 $('clear').onclick = async () => {

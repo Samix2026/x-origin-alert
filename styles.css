@@ -18,3 +18,33 @@
 @media (prefers-color-scheme: dark) {
   .xoa-badge { background: #3a2a0f; color: #fbbf24; border-color: #b45309; }
 }
+.xoa-badge[dir="rtl"] { font-family: system-ui, Tahoma, sans-serif; }
+.xoa-card {
+  position: fixed;
+  z-index: 2147483000;
+  width: 300px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: #ffffff;
+  color: #0f1419;
+  border: 1px solid #cfd9de;
+  box-shadow: 0 8px 28px rgba(0,0,0,.18);
+  font: 13px/1.5 system-ui, Tahoma, sans-serif;
+  text-align: right;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(4px);
+  transition: opacity .15s ease, transform .15s ease;
+}
+.xoa-card.on { opacity: 1; transform: none; }
+.xoa-h { font-weight: 700; font-size: 14px; margin-bottom: 8px; text-align: left; color: #536471; }
+.xoa-row { display: flex; justify-content: space-between; gap: 10px; padding: 4px 0; border-top: 1px solid #eff3f4; }
+.xoa-l { color: #536471; white-space: nowrap; }
+.xoa-v { font-weight: 600; unicode-bidi: plaintext; text-align: left; }
+.xoa-warn .xoa-v { color: #b45309; }
+.xoa-f { margin-top: 8px; font-size: 11px; color: #8b98a5; }
+@media (prefers-color-scheme: dark) {
+  .xoa-card { background: #15202b; color: #e7e9ea; border-color: #38444d; }
+  .xoa-row { border-color: #2f3336; }
+  .xoa-warn .xoa-v { color: #fbbf24; }
+}

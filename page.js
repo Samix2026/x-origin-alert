@@ -87,10 +87,19 @@
     const result = data && data.data && data.data.user_result_by_screen_name && data.data.user_result_by_screen_name.result;
     if (!result) return { status: 'nouser' };
     const about = result.about_profile || null;
+    const num = (x) => { const n = Number(x); return Number.isFinite(n) && n > 0 ? n : null; };
+    const uc = (about && about.username_changes) || {};
+    const created = result.core && result.core.created_at ? Date.parse(result.core.created_at) : NaN;
+    const vinfo = result.verification_info && result.verification_info.reason;
     return {
       status: 'ok',
       basedIn: (about && about.account_based_in) || null,
       vpn: detectVpn(about),
+      source: (about && about.source) || null,
+      created: Number.isFinite(created) ? created : null,
+      renames: Number(uc.count) || 0,
+      renamedAt: num(uc.last_changed_at_msec),
+      verifiedSince: result.is_blue_verified ? num(vinfo && vinfo.verified_since_msec) : null,
       keys: about ? Object.keys(about) : [],
       remaining: Number(res.headers.get('x-rate-limit-remaining'))
     };

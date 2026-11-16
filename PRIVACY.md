@@ -2,7 +2,7 @@
 
 # سياسة الخصوصية: منبه موقع الحساب في اكس
 
-آخر تحديث: 14 نوفمبر 2026
+آخر تحديث: 16 نوفمبر 2026
 
 ## ما الذي تفعله الإضافة
 
@@ -11,7 +11,7 @@
 ## البيانات التي تتعامل معها
 
 - **اسم المستخدم للحسابات الظاهرة على شاشتك،** لطلب معلومة موقعها من اكس.
-- **معلومة الموقع ومؤشر VPN** كما تعرضها اكس للعامة.
+- **بيانات صفحة About this account** كما تعرضها اكس للعامة: مكان الحساب، ومؤشر VPN، ومتجر التطبيقات، وتاريخ الإنشاء، وتاريخ التوثيق، وعدد مرات تغيير اسم المستخدم.
 - **إعداداتك داخل الإضافة،** مثل التشغيل والإيقاف وقائمة المناطق.
 
 ## أين تحفظ البيانات
@@ -42,4 +42,4 @@
 
 ## Privacy Policy (English)
 
-X Origin Alert reads the public "Account based in" information that X shows on each account's About page, and shows a warning badge for West Asia, North Africa, or a VPN indicator. Results and settings are stored locally in your browser only (up to 14 days). No data is sent to any server other than x.com. No analytics, tracking, or ads. No login credentials are read, stored, or transmitted. No data is sold or shared with third parties. Clear all stored data from the extension popup or by removing the extension. Contact: https://github.com/Samix2026/x-origin-alert/issues
+X Origin Alert reads the public information X shows on each account's About page (account location, VPN indicator, app store, creation date, verification date, username change count), shows warning badges for West Asia, North Africa, a VPN indicator, or frequent username changes, and an account info card on hover. Results and settings are stored locally in your browser only (up to 14 days). No data is sent to any server other than x.com. No analytics, tracking, or ads. No login credentials are read, stored, or transmitted. No data is sold or shared with third parties. Clear all stored data from the extension popup or by removing the extension. Contact: https://github.com/Samix2026/x-origin-alert/issues

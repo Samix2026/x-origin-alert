@@ -1,7 +1,8 @@
 // يرصد أسماء الحسابات الظاهرة على الشاشة، ويطلب موقعها بمعدل محدود،
-// ويضع علامة تحذير عند ظهور منطقة من القائمة أو مؤشر VPN.
+// ويضع علامة تحذير عند ظهور منطقة من القائمة أو مؤشر VPN أو كثرة تغيير اسم المستخدم،
+// ويعرض بطاقة معلومات الحساب عند المرور بالماوس على الاسم.
 (() => {
-  const DEFAULTS = { enabled: true, regions: ['West Asia', 'North Africa'], warnVpn: true };
+  const DEFAULTS = { enabled: true, regions: ['West Asia', 'North Africa'], warnVpn: true, warnRenames: true, renameLimit: 10 };
   const TTL_OK = 14 * 24 * 3600 * 1000;      // تخزين النتيجة 14 يوما
   const TTL_EMPTY = 2 * 24 * 3600 * 1000;    // حساب بلا بيانات: يومان
   const TTL_FLAG = 24 * 3600 * 1000;         // التحذير يعاد فحصه بعد يوم واحد
@@ -28,11 +29,15 @@
     for (const [u, v] of Object.entries(cache)) {
       if (!v || v.exp < now) { delete cache[u]; continue; }
       // تحذير محفوظ أقدم من يوم، أو من نسخة سابقة بلا وقت فحص: يحذف ليعاد فحصه
-      if (classify(v) && (!v.t || now - v.t > TTL_FLAG)) delete cache[u];
+      if (classify(v) && (!v.t || now - v.t > TTL_FLAG)) { delete cache[u]; continue; }
+      // نتيجة من نسخة سابقة بلا بيانات البطاقة: يعاد فحصها خلال يوم بالتدريج
+      if (!('n' in v)) v.exp = Math.min(v.exp, now + Math.random() * TTL_FLAG);
     }
   }
-  function store(u, basedIn, vpn) {
-    const rec = { b: basedIn, v: !!vpn, t: Date.now() };
+  function store(u, out) {
+    const rec = { b: out.basedIn || null, v: !!out.vpn, s: out.source || null, c: out.created || null,
+      n: out.renames || 0, nl: out.renamedAt || null, vs: out.verifiedSince || null, t: Date.now() };
+    const basedIn = rec.b;
     const ttl = classify(rec) ? TTL_FLAG : (basedIn ? TTL_OK : TTL_EMPTY);
     rec.exp = rec.t + ttl;
     cache[u.toLowerCase()] = rec;
@@ -55,6 +60,7 @@
     if (ch.xoa_settings) {
       settings = { ...DEFAULTS, ...(ch.xoa_settings.newValue || {}) };
       document.querySelectorAll('.xoa-badge').forEach(b => b.remove());
+      onLeave();
       document.querySelectorAll('[data-xoa]').forEach(e => e.removeAttribute('data-xoa'));
       scan();
     }
@@ -96,7 +102,7 @@
     const out = await ask(u);
     log(u, out);
     if (out.status === 'ok') {
-      store(u, out.basedIn, out.vpn);
+      store(u, out);
       bump('checked');
       if (classify(cache[u.toLowerCase()])) bump('flagged');
       setStatus('ok');
@@ -107,7 +113,7 @@
       setStatus('ratelimit');
       log('rate limited until', new Date(pausedUntil).toLocaleTimeString());
     } else if (out.status === 'nouser') {
-      store(u, null, false);
+      store(u, {});
       paint(u);
     } else {
       setStatus(out.status);
@@ -124,24 +130,94 @@
     const reasons = [];
     if (rec.b && regions.includes(rec.b.toLowerCase())) reasons.push('region');
     if (settings.warnVpn && rec.v) reasons.push('vpn');
+    if (settings.warnRenames && rec.n >= Math.max(1, Number(settings.renameLimit) || 10)) reasons.push('renames');
     return reasons.length ? reasons : null;
   }
 
-  function makeBadge(rec, reasons) {
+  // شارة مستقلة لكل سبب، حتى لا يختلط النص العربي بالإنجليزي
+  function makeBadge(rec, reason) {
     const b = document.createElement('span');
     b.className = 'xoa-badge';
-    const parts = [];
-    if (reasons.includes('region')) parts.push(rec.b);
-    if (reasons.includes('vpn')) parts.push('VPN');
-    b.textContent = '⚠ ' + parts.join(' · ');
-    const tip = [];
-    if (reasons.includes('region')) tip.push(`اكس تعرض موقع هذا الحساب كمنطقة عامة: ${rec.b}، ولا تعرض دولة محددة.`);
-    if (reasons.includes('vpn')) tip.push('اكس تشير إلى أن الحساب قد يتصل عبر VPN أو بروكسي، فالموقع المعروض قد لا يكون دقيقا.');
-    tip.push('هذا مؤشر وليس حكما. تحقق قبل التفاعل.');
-    tip.push('اضغط على العلامة لإعادة الفحص الآن.');
-    b.title = tip.join('\n');
+    if (reason === 'region') { b.textContent = '⚠ ' + rec.b; b.dir = 'ltr'; }
+    if (reason === 'vpn') { b.textContent = '⚠ VPN'; b.dir = 'ltr'; }
+    if (reason === 'renames') { b.textContent = `⚠ غير اسمه ${rec.n} مرة`; b.dir = 'rtl'; }
+    b.title = 'اضغط لإعادة الفحص الآن';
     b.addEventListener('click', onBadgeClick, true);
     return b;
+  }
+
+  // ---------- بطاقة معلومات الحساب ----------
+  const fmt = (ms) => { try { return new Date(ms).toLocaleDateString('ar-SA-u-ca-gregory-nu-latn', { month: 'long', year: 'numeric' }); } catch (_) { return ''; } };
+  let card = null, cardTimer = null, cardFor = null;
+  function cardEl() {
+    if (card) return card;
+    card = document.createElement('div');
+    card.className = 'xoa-card';
+    card.dir = 'rtl';
+    document.body.appendChild(card);
+    return card;
+  }
+  function row(label, value, warn) {
+    const r = document.createElement('div');
+    r.className = 'xoa-row' + (warn ? ' xoa-warn' : '');
+    const l = document.createElement('span'); l.className = 'xoa-l'; l.textContent = label;
+    const v = document.createElement('span'); v.className = 'xoa-v'; v.textContent = value;
+    r.append(l, v);
+    return r;
+  }
+  function renderCard(u) {
+    const rec = cache[u];
+    const c = cardEl();
+    c.replaceChildren();
+    const h = document.createElement('div'); h.className = 'xoa-h'; h.dir = 'ltr'; h.textContent = '@' + u;
+    c.appendChild(h);
+    if (!rec || !('n' in rec)) {
+      c.appendChild(row('', 'جاري الفحص…'));
+      return;
+    }
+    const reasons = classify(rec) || [];
+    c.appendChild(row('مكان الحساب', rec.b || 'غير متاح', reasons.includes('region')));
+    if (rec.v) c.appendChild(row('ملاحظة اكس', 'قد يتصل عبر VPN', reasons.includes('vpn')));
+    c.appendChild(row('الاتصال عبر', rec.s || 'غير متاح'));
+    if (rec.c) c.appendChild(row('تاريخ الإنشاء', fmt(rec.c)));
+    c.appendChild(row('التوثيق', rec.vs ? 'منذ ' + fmt(rec.vs) : 'غير موثق'));
+    c.appendChild(row('تغيير اسم المستخدم', rec.n ? `${rec.n} مرة` + (rec.nl ? '، آخرها ' + fmt(rec.nl) : '') : 'لم يتغير', reasons.includes('renames')));
+    const f = document.createElement('div'); f.className = 'xoa-f'; f.textContent = 'البيانات من اكس. مؤشر وليس حكما.';
+    c.appendChild(f);
+  }
+  function placeCard(anchor) {
+    const c = cardEl();
+    const r = anchor.getBoundingClientRect();
+    const w = 300;
+    let left = Math.min(Math.max(8, r.right - w), window.innerWidth - w - 8);
+    let top = r.bottom + 8;
+    c.style.left = left + 'px';
+    c.style.top = top + 'px';
+    c.classList.add('on');
+    const ch = c.getBoundingClientRect().height;
+    if (top + ch > window.innerHeight - 8) c.style.top = Math.max(8, r.top - ch - 8) + 'px';
+  }
+  function onEnter(ev) {
+    const block = ev.currentTarget;
+    const u = block.getAttribute('data-xoa-u');
+    if (!u) return;
+    clearTimeout(cardTimer);
+    cardTimer = setTimeout(() => {
+      cardFor = u;
+      renderCard(u);
+      placeCard(block);
+      const rec = cache[u];
+      if (!rec || !('n' in rec)) {
+        if (!pending.has(u)) pending.set(u, []);
+        pending.get(u).push(block);
+        enqueue(u, true);
+      }
+    }, 450);
+  }
+  function onLeave() {
+    clearTimeout(cardTimer);
+    cardFor = null;
+    if (card) card.classList.remove('on');
   }
 
   function onPage(u) {
@@ -151,13 +227,14 @@
     const rec = cache[u.toLowerCase()];
     const els = new Set([...(pending.get(u) || []), ...onPage(u)]);
     pending.delete(u);
-    const reasons = classify(rec);
+    const reasons = classify(rec) || [];
     for (const el of els) {
       if (!el.isConnected) continue;
       el.setAttribute('data-xoa', 'done');
       el.querySelectorAll(':scope > .xoa-badge').forEach(b => b.remove());
-      if (reasons) el.appendChild(makeBadge(rec, reasons));
+      for (const r of reasons) el.appendChild(makeBadge(rec, r));
     }
+    if (cardFor === u.toLowerCase()) renderCard(cardFor);
   }
   // الضغط على العلامة: يلغي النتيجة المحفوظة ويعيد الفحص فورا
   function onBadgeClick(ev) {
@@ -167,6 +244,7 @@
     const block = badge.parentElement;
     const u = block && block.getAttribute('data-xoa-u');
     if (!u) return;
+    block.querySelectorAll(':scope > .xoa-badge').forEach(b => { if (b !== badge) b.remove(); });
     badge.textContent = '⏳';
     delete cache[u];
     saveSoon();
@@ -201,6 +279,11 @@
     if (!u0) return;
     const u = u0.toLowerCase();
     block.setAttribute('data-xoa-u', u);
+    if (!block.__xoaHover) {
+      block.__xoaHover = true;
+      block.addEventListener('mouseenter', onEnter);
+      block.addEventListener('mouseleave', onLeave);
+    }
     const isProfile = block.getAttribute('data-testid') === 'UserName';
     const rec = cache[u];
     if (!pending.has(u)) pending.set(u, []);
