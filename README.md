@@ -59,12 +59,22 @@
 - رؤية عدد الحسابات المفحوصة وعدد التحذيرات
 - مسح الذاكرة المؤقتة
 
-## الخصوصية
+## هل الإضافة آمنة؟
 
-- الإضافة تعمل بالكامل داخل متصفحك وبجلستك في اكس.
-- لا ترسل أي بيانات لأي خادم خارج x.com.
-- لا تجمع ولا تحفظ بيانات دخولك.
-- النتائج تحفظ محليا في متصفحك فقط لمدة 14 يوما لتقليل الطلبات.
+نعم، وكل نقطة هنا تستطيع التحقق منها بنفسك:
+
+1. **لا ترسل بياناتك لأي جهة:** الإضافة تتواصل مع موقع اكس فقط، ولا تستخدم أي خادم خاص بنا. لا يوجد في الكود أي اتصال بموقع آخر.
+2. **صلاحيتان فقط:**
+   - العمل على موقعي `x.com` و`twitter.com` فقط.
+   - حفظ إعداداتها ونتائج الفحص داخل متصفحك (`storage`).
+
+   تستطيع رؤيتهما في صفحة الإضافة بالمتجر، أو في ملف [manifest.json](manifest.json).
+3. **لا تقرأ كلمة المرور ولا تحفظ بيانات دخولك:** تعمل داخل صفحة اكس المفتوحة عندك، مثل أي شيء تراه بعينك في الصفحة.
+4. **البيانات التي تقرؤها عامة:** هي نفس المعلومات التي تعرضها اكس لأي شخص في صفحة About this account لكل حساب.
+5. **النتائج تحفظ في متصفحك فقط:** لمدة أقصاها 14 يوما، وتمسحها متى شئت من زر مسح الذاكرة المؤقتة، أو بحذف الإضافة.
+6. **الكود مفتوح المصدر بالكامل:** كل سطر موجود في هذا المستودع، ويستطيع أي مبرمج مراجعته.
+
+التفاصيل الكاملة في [سياسة الخصوصية](PRIVACY.md).
 
 ## كيف تتجنب تقييد حسابك
 
@@ -91,4 +101,4 @@ MIT
 
 ## English
 
-Chrome extension that shows a warning badge next to X (Twitter) usernames when the account's **Account based in** is *West Asia* or *North Africa*, or when X shows a VPN/proxy indicator. Runs entirely in your browser using your own X session; no data leaves x.com. The badge is a signal, not a verdict. Install from the [Chrome Web Store](https://chromewebstore.google.com/detail/glekbdcdgghjbhehbdcojikcefjieikl), or manually via `chrome://extensions` → Developer mode → Load unpacked. MIT licensed.
+Chrome extension that shows a warning badge next to X (Twitter) usernames when the account's **Account based in** is *West Asia* or *North Africa*, or when X shows a VPN/proxy indicator. Runs entirely in your browser using your own X session; no data leaves x.com, only two permissions (x.com access and local storage), fully open source. The badge is a signal, not a verdict. Install from the [Chrome Web Store](https://chromewebstore.google.com/detail/glekbdcdgghjbhehbdcojikcefjieikl), or manually via `chrome://extensions` → Developer mode → Load unpacked. MIT licensed.
