@@ -6,14 +6,14 @@
 
 <p align="center">🎬 <a href="https://x.com/SamiBizConsult/status/2121725434610028886">شاهد الفيديو الكامل على اكس</a></p>
 
-إضافة لمتصفح كروم تضع علامة تحذير بجانب اسم الحساب في منصة اكس، دون الحاجة لفتح البروفايل، إذا كان موقع الحساب في خانة **Account based in** واحدا من:
+إضافة لمتصفح كروم تعرض دولة كل حساب في منصة اكس بجانب اسمه مع علم الدولة، دون الحاجة لفتح البروفايل. المعلومة مأخوذة من خانة **Account based in** التي تعرضها اكس.
 
-- **West Asia**
-- **North Africa**
-- أو ظهر على الحساب **مؤشر VPN** من اكس
-- أو غير الحساب **اسم المستخدم 10 مرات أو أكثر** (الحد قابل للتعديل)
+- **شارة رمادية:** معلومة عادية، مثل دولة الحساب.
+- **شارة برتقالية:** تحذير، وتظهر إذا كان موقع الحساب **West Asia** أو **North Africa**، أو ظهر عليه **مؤشر VPN** من اكس، أو غير **اسم المستخدم 10 مرات أو أكثر** (الحد والمناطق قابلة للتعديل).
 
-وعند المرور بالماوس على اسم أي حساب تظهر **بطاقة معلومات** فيها: مكان الحساب، ومتجر التطبيقات الذي يتصل منه، وتاريخ الإنشاء، وتاريخ التوثيق، وعدد مرات تغيير اسم المستخدم وآخرها.
+وعند المرور بالماوس على الشارة تظهر **بطاقة معلومات** فيها: مكان الحساب، ومتجر التطبيقات الذي يتصل منه، وتاريخ الإنشاء، وتاريخ التوثيق، وعدد مرات تغيير اسم المستخدم وآخرها، وزر **أثق بهذا الحساب** الذي يخفي التحذير عن الحسابات التي تعرفها.
+
+تعمل بالعربية والإنجليزية، وتتبع لغة واجهة اكس تلقائيا، وتتبع المظهر الفاتح أو الداكن.
 
 <p align="center"><img src="assets/card.png" alt="بطاقة معلومات الحساب عند المرور بالماوس على الاسم" width="560"></p>
 
@@ -53,11 +53,13 @@
 من أيقونة الإضافة في شريط كروم يمكنك:
 
 - تشغيل الإضافة أو إيقافها
+- اختيار اللغة: تلقائي حسب اكس، أو العربية، أو الإنجليزية
+- إظهار دولة كل حساب، أو إظهار التحذيرات فقط
 - تشغيل تحذير VPN أو إيقافه
 - تعديل قائمة المناطق التي يظهر عندها التحذير
 - تشغيل تحذير تغيير اسم المستخدم أو إيقافه، وتعديل حده
-- رؤية عدد الحسابات المفحوصة وعدد التحذيرات
-- مسح الذاكرة المؤقتة
+- رؤية عدد الحسابات المفحوصة وعدد التحذيرات وعدد الحسابات الموثوقة
+- مسح قائمة الحسابات الموثوقة، أو مسح الذاكرة المؤقتة
 
 ## هل الإضافة آمنة؟
 
@@ -68,6 +70,7 @@
 - **لا تقرأ كلمة المرور ولا تحفظ بيانات دخولك:** تعمل داخل صفحة اكس المفتوحة عندك، مثل أي شيء تراه بعينك في الصفحة.
 - **البيانات التي تقرؤها عامة:** هي نفس المعلومات التي تعرضها اكس لأي شخص في صفحة About this account لكل حساب.
 - **النتائج تحفظ في متصفحك فقط:** لمدة أقصاها 14 يوما، وتمسحها متى شئت من زر مسح الذاكرة المؤقتة، أو بحذف الإضافة.
+- **الأعلام مضمنة داخل الإضافة:** لا تحمل أي صورة أو ملف من خارجها.
 - **الكود مفتوح المصدر بالكامل:** كل سطر موجود في هذا المستودع، ويستطيع أي مبرمج مراجعته.
 
 التفاصيل الكاملة في [سياسة الخصوصية](PRIVACY.md).
@@ -87,6 +90,8 @@
 
 MIT
 
+صور الأعلام من مكتبة [flag-icons](https://github.com/lipis/flag-icons) بترخيص MIT، والترخيص في ملف [LICENSE-flag-icons](LICENSE-flag-icons).
+
 ---
 
 إعداد: سامي المحيميد [@SamiBizConsult](https://x.com/SamiBizConsult)
@@ -97,4 +102,4 @@ MIT
 
 ## English
 
-Chrome extension that shows a warning badge next to X (Twitter) usernames when the account's **Account based in** is *West Asia* or *North Africa*, or when X shows a VPN/proxy indicator. Runs entirely in your browser using your own X session; no data leaves x.com, only two permissions (x.com access and local storage), fully open source. The badge is a signal, not a verdict. Install from the [Chrome Web Store](https://chromewebstore.google.com/detail/glekbdcdgghjbhehbdcojikcefjieikl), or manually via `chrome://extensions` → Developer mode → Load unpacked. MIT licensed.
+Chrome extension that shows each X (Twitter) account's country, with its flag, next to the username, taken from X's own **Account based in** field. Neutral gray badge for information; amber warning badge when the account is based in *West Asia* or *North Africa*, shows a VPN/proxy indicator, or changed its username 10+ times (all configurable). Hover a badge for an account card with a "Trust this account" button that silences warnings for accounts you know. Arabic and English UI (follows X's language by default), light and dark themes. Runs entirely in your browser using your own X session; no data leaves x.com, flags are bundled, only two permissions (x.com access and local storage), fully open source. The badge is a signal, not a verdict. Install from the [Chrome Web Store](https://chromewebstore.google.com/detail/glekbdcdgghjbhehbdcojikcefjieikl), or manually via `chrome://extensions` → Developer mode → Load unpacked. MIT licensed; flag images from [flag-icons](https://github.com/lipis/flag-icons) (MIT).

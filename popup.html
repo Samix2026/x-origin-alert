@@ -3,29 +3,44 @@
 <head>
 <meta charset="utf-8">
 <style>
-  body { font-family: system-ui, Tahoma, sans-serif; width: 300px; margin: 0; padding: 14px; color: #111; }
+  body { font-family: system-ui, -apple-system, "Segoe UI", Tahoma, sans-serif; width: 310px; margin: 0; padding: 14px; color: #0f1419; }
   h1 { font-size: 15px; margin: 0 0 10px; }
   label { display: flex; align-items: center; gap: 8px; margin: 8px 0; font-size: 13px; }
-  textarea { width: 100%; box-sizing: border-box; direction: ltr; text-align: left; font-size: 13px; height: 58px; }
-  .muted { color: #666; font-size: 12px; }
+  select { font-size: 13px; padding: 2px 4px; }
+  textarea { width: 100%; box-sizing: border-box; direction: ltr; text-align: left; font-size: 13px; height: 54px; }
+  .muted { color: #536471; font-size: 12px; }
   .row { display: flex; justify-content: space-between; font-size: 13px; margin: 4px 0; }
-  button { margin-top: 10px; padding: 6px 10px; font-size: 12px; cursor: pointer; }
+  hr { border: none; border-top: 1px solid #eff3f4; margin: 10px 0; }
+  button { margin-top: 8px; padding: 6px 10px; font-size: 12px; cursor: pointer; border-radius: 999px; border: 1px solid #cfd9de; background: #fff; }
+  button.primary { background: #0f1419; color: #fff; border-color: #0f1419; }
   #status { margin-top: 8px; font-size: 12px; }
 </style>
 </head>
 <body>
-  <h1>منبه موقع الحساب في اكس</h1>
-  <label><input type="checkbox" id="enabled"> تشغيل الإضافة</label>
-  <label><input type="checkbox" id="warnVpn"> تحذير عند مؤشر VPN</label>
-  <label><input type="checkbox" id="warnRenames"> تحذير عند كثرة تغيير اسم المستخدم</label>
-  <label>الحد: <input type="number" id="renameLimit" min="1" max="200" style="width:64px"> مرة فأكثر</label>
-  <div class="muted">المناطق التي يظهر عندها تحذير (سطر لكل منطقة كما تكتبها اكس):</div>
+  <h1 data-t="title"></h1>
+  <label><input type="checkbox" id="enabled"> <span data-t="enabled"></span></label>
+  <label><span data-t="language"></span>
+    <select id="lang">
+      <option value="auto" data-t="langAuto"></option>
+      <option value="ar">العربية</option>
+      <option value="en">English</option>
+    </select>
+  </label>
+  <label><input type="checkbox" id="showAll"> <span data-t="showAll"></span></label>
+  <hr>
+  <label><input type="checkbox" id="warnVpn"> <span data-t="warnVpn"></span></label>
+  <label><input type="checkbox" id="warnRenames"> <span data-t="warnRenames"></span></label>
+  <label><span data-t="limit"></span> <input type="number" id="renameLimit" min="1" max="200" style="width:64px"></label>
+  <div class="muted" data-t="regionsHelp"></div>
   <textarea id="regions"></textarea>
-  <div class="row"><span>حسابات تم فحصها</span><b id="checked">0</b></div>
-  <div class="row"><span>تحذيرات ظهرت</span><b id="flagged">0</b></div>
+  <hr>
+  <div class="row"><span data-t="checked"></span><b id="checked">0</b></div>
+  <div class="row"><span data-t="flagged"></span><b id="flagged">0</b></div>
+  <div class="row"><span data-t="trusted"></span><b id="trustedCount">0</b></div>
   <div id="status" class="muted"></div>
-  <button id="save">حفظ</button>
-  <button id="clear">مسح الذاكرة المؤقتة</button>
+  <button id="save" class="primary" data-t="save"></button>
+  <button id="clearTrust" data-t="clearTrust"></button>
+  <button id="clear" data-t="clear"></button>
   <script src="popup.js"></script>
 </body>
 </html>

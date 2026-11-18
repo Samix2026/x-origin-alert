@@ -1,24 +1,25 @@
+/* الشارات: رمادي للمعلومة، برتقالي للتحذير. تتبع مظهر اكس الفاتح أو الداكن */
 .xoa-badge {
   display: inline-flex;
   align-items: center;
+  gap: 5px;
   margin-inline-start: 6px;
-  padding: 1px 7px;
+  padding: 1px 9px 1px 8px;
   border-radius: 999px;
-  background: #fff4e5;
-  color: #b45309;
-  border: 1px solid #f59e0b;
-  font-size: 12px;
-  font-weight: 700;
-  line-height: 18px;
+  font: 600 12px/18px system-ui, -apple-system, "Segoe UI", Tahoma, sans-serif;
   white-space: nowrap;
-  direction: ltr;
-  cursor: pointer;
   vertical-align: middle;
+  cursor: pointer;
+  user-select: none;
 }
-@media (prefers-color-scheme: dark) {
-  .xoa-badge { background: #3a2a0f; color: #fbbf24; border-color: #b45309; }
-}
-.xoa-badge[dir="rtl"] { font-family: system-ui, Tahoma, sans-serif; }
+.xoa-badge.xoa-n { background: #f7f9f9; color: #536471; border: 1px solid #cfd9de; }
+.xoa-badge.xoa-w { background: #fff4e5; color: #9a4b0a; border: 1px solid #f59e0b; }
+[data-xoa-theme="dark"] .xoa-badge.xoa-n { background: #16181c; color: #8b98a5; border-color: #333639; }
+[data-xoa-theme="dark"] .xoa-badge.xoa-w { background: #3a2a0f; color: #fbbf24; border-color: #b45309; }
+.xoa-flag { width: 16px; height: 12px; border-radius: 2px; object-fit: cover; flex: none; box-shadow: 0 0 0 0.5px rgba(0,0,0,.15); }
+.xoa-ico { display: inline-flex; flex: none; }
+
+/* بطاقة معلومات الحساب */
 .xoa-card {
   position: fixed;
   z-index: 2147483000;
@@ -29,22 +30,30 @@
   color: #0f1419;
   border: 1px solid #cfd9de;
   box-shadow: 0 8px 28px rgba(0,0,0,.18);
-  font: 13px/1.5 system-ui, Tahoma, sans-serif;
-  text-align: right;
+  font: 13px/1.5 system-ui, -apple-system, "Segoe UI", Tahoma, sans-serif;
   opacity: 0;
   pointer-events: none;
   transform: translateY(4px);
   transition: opacity .15s ease, transform .15s ease;
 }
-.xoa-card.on { opacity: 1; transform: none; }
-.xoa-h { font-weight: 700; font-size: 14px; margin-bottom: 8px; text-align: left; color: #536471; }
-.xoa-row { display: flex; justify-content: space-between; gap: 10px; padding: 4px 0; border-top: 1px solid #eff3f4; }
+.xoa-card[dir="rtl"] { text-align: right; }
+.xoa-card.on { opacity: 1; transform: none; pointer-events: auto; }
+.xoa-h { font-weight: 700; font-size: 14px; margin-bottom: 8px; color: #536471; }
+.xoa-card[dir="rtl"] .xoa-h { text-align: left; }
+.xoa-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 4px 0; border-top: 1px solid #eff3f4; }
 .xoa-l { color: #536471; white-space: nowrap; }
-.xoa-v { font-weight: 600; unicode-bidi: plaintext; text-align: left; }
+.xoa-v { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; unicode-bidi: plaintext; }
 .xoa-warn .xoa-v { color: #b45309; }
-.xoa-f { margin-top: 8px; font-size: 11px; color: #8b98a5; }
-@media (prefers-color-scheme: dark) {
-  .xoa-card { background: #15202b; color: #e7e9ea; border-color: #38444d; }
-  .xoa-row { border-color: #2f3336; }
-  .xoa-warn .xoa-v { color: #fbbf24; }
+.xoa-trusted { margin-top: 8px; padding: 6px 8px; border-radius: 8px; background: #ecfdf3; color: #166534; font-size: 12px; }
+.xoa-trust {
+  margin-top: 8px; width: 100%; padding: 6px 10px; border-radius: 999px; cursor: pointer;
+  background: transparent; color: #0f1419; border: 1px solid #cfd9de; font: 600 12px system-ui, Tahoma, sans-serif;
 }
+.xoa-trust:hover { background: #f7f9f9; }
+.xoa-f { margin-top: 8px; font-size: 11px; color: #8b98a5; }
+[data-xoa-theme="dark"] .xoa-card { background: #15202b; color: #e7e9ea; border-color: #38444d; }
+[data-xoa-theme="dark"] .xoa-row { border-color: #2f3336; }
+[data-xoa-theme="dark"] .xoa-warn .xoa-v { color: #fbbf24; }
+[data-xoa-theme="dark"] .xoa-trusted { background: #0f2a1d; color: #7dd3a0; }
+[data-xoa-theme="dark"] .xoa-trust { color: #e7e9ea; border-color: #38444d; }
+[data-xoa-theme="dark"] .xoa-trust:hover { background: #1e2732; }

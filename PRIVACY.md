@@ -2,21 +2,23 @@
 
 # سياسة الخصوصية: منبه موقع الحساب في اكس
 
-آخر تحديث: 16 نوفمبر 2026
+آخر تحديث: 18 نوفمبر 2026
 
 ## ما الذي تفعله الإضافة
 
-تقرأ الإضافة معلومة Account based in المعروضة للعامة في صفحة About this account في منصة اكس، وتضع علامة تحذير بجانب اسم الحساب عند ظهور منطقة West Asia أو North Africa أو مؤشر VPN.
+تقرأ الإضافة معلومة Account based in المعروضة للعامة في صفحة About this account في منصة اكس، وتعرض دولة الحساب بجانب اسمه، وتضع علامة تحذير عند ظهور منطقة West Asia أو North Africa أو مؤشر VPN أو كثرة تغيير اسم المستخدم. صور الأعلام مضمنة داخل الإضافة ولا تحمل من أي موقع.
 
 ## البيانات التي تتعامل معها
 
 - **اسم المستخدم للحسابات الظاهرة على شاشتك،** لطلب معلومة موقعها من اكس.
 - **بيانات صفحة About this account** كما تعرضها اكس للعامة: مكان الحساب، ومؤشر VPN، ومتجر التطبيقات، وتاريخ الإنشاء، وتاريخ التوثيق، وعدد مرات تغيير اسم المستخدم.
-- **إعداداتك داخل الإضافة،** مثل التشغيل والإيقاف وقائمة المناطق.
+- **إعداداتك داخل الإضافة،** مثل التشغيل والإيقاف واللغة وقائمة المناطق.
+- **قائمة الحسابات الموثوقة،** وهي أسماء المستخدمين التي تضيفها أنت بزر أثق بهذا الحساب.
 
 ## أين تحفظ البيانات
 
-- تحفظ النتائج والإعدادات محليا في متصفحك فقط، ولمدة أقصاها 14 يوما.
+- تحفظ النتائج محليا في متصفحك فقط، ولمدة أقصاها 14 يوما.
+- تحفظ الإعدادات وقائمة الحسابات الموثوقة محليا في متصفحك، حتى تمسحها أنت.
 - لا ترسل الإضافة أي بيانات إلى أي خادم غير x.com.
 - لا تستخدم الإضافة أي خدمات تحليل أو تتبع أو إعلانات.
 
@@ -30,7 +32,7 @@
 
 ## حذف البيانات
 
-تستطيع مسح كل البيانات المحفوظة من زر مسح الذاكرة المؤقتة في نافذة الإضافة، أو بحذف الإضافة من المتصفح.
+تستطيع مسح النتائج من زر مسح الذاكرة المؤقتة، ومسح الحسابات الموثوقة من زرها في نافذة الإضافة، أو مسح كل شيء بحذف الإضافة من المتصفح.
 
 ## التواصل
 
@@ -42,4 +44,4 @@
 
 ## Privacy Policy (English)
 
-X Origin Alert reads the public information X shows on each account's About page (account location, VPN indicator, app store, creation date, verification date, username change count), shows warning badges for West Asia, North Africa, a VPN indicator, or frequent username changes, and an account info card on hover. Results and settings are stored locally in your browser only (up to 14 days). No data is sent to any server other than x.com. No analytics, tracking, or ads. No login credentials are read, stored, or transmitted. No data is sold or shared with third parties. Clear all stored data from the extension popup or by removing the extension. Contact: https://github.com/Samix2026/x-origin-alert/issues
+X Origin Alert reads the public information X shows on each account's About page (account location, VPN indicator, app store, creation date, verification date, username change count), shows the account country with a bundled flag image, warning badges for West Asia, North Africa, a VPN indicator, or frequent username changes, and an account info card on hover. Results are stored locally in your browser only (up to 14 days); settings and your trusted-accounts list are stored locally until you clear them. No data is sent to any server other than x.com. No analytics, tracking, or ads. No login credentials are read, stored, or transmitted. No data is sold or shared with third parties. Clear all stored data from the extension popup or by removing the extension. Contact: https://github.com/Samix2026/x-origin-alert/issues

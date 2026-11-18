@@ -2,8 +2,8 @@
   "manifest_version": 3,
   "name": "منبه موقع الحساب في اكس",
   "short_name": "X Origin Alert",
-  "version": "0.2.0",
-  "description": "تحذير بجانب حسابات اكس عند ظهور West Asia أو North Africa أو VPN أو كثرة تغيير الاسم، مع بطاقة معلومات الحساب.",
+  "version": "0.3.0",
+  "description": "يعرض دولة كل حساب في اكس بعلمها، ويحذر عند West Asia أو North Africa أو VPN أو كثرة تغيير الاسم. عربي وإنجليزي.",
   "permissions": [
     "storage"
   ],
@@ -38,6 +38,7 @@
         "https://twitter.com/*"
       ],
       "js": [
+        "countries.js",
         "content.js"
       ],
       "css": [
